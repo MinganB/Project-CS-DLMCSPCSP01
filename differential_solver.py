@@ -36,6 +36,9 @@ class differential_solver:
         Find u for all time points.
         u is an array where u[i] is the solution at time t[i].
         """
+        if not isinstance(time_points, (list, np.ndarray)):
+            raise ValueError('time_points should be a list or array')
+
         self.t = np.asarray(time_points)
         n = self.t.size
 
