@@ -2,20 +2,24 @@ import numpy as np
 
 class differential_solver:
     """
-    Generic interface to differential equation solvers.
-    Subclass this class to implement a new solver.
-
-    The subclass must implement the method step(self) that advances the solution one time step.
+    Base class for solving ordinary differential equations.
     """
     def __init__(self, f):
         self.f = f
 
     def step(self):
-        """Move one time step forward."""
+        """
+        Move one time step forward.
+        This method must be implemented in the subclass.
+        """
         raise NotImplementedError
     
     def set_initial(self, U0):
-        """Set the initial condition."""
+        """
+        Set the initial condition.
+        U0 can be a scalar or a numpy array.
+        neq is the number of equations in the system.
+        """
         if isinstance(U0, (float, int)):
             self.neq = 1
             U0 = float(U0)
@@ -28,7 +32,10 @@ class differential_solver:
         self.U0 = U0
 
     def solve(self, time_points):
-        """Compute the solution at the given time points."""
+        """
+        Find u for all time points.
+        u is an array where u[i] is the solution at time t[i].
+        """
         self.t = np.asarray(time_points)
         n = self.t.size
 
@@ -42,6 +49,12 @@ class differential_solver:
         return self.u[:i+2], self.t[:i+2]
 
 class ForwardEuler(differential_solver):
+    """
+    Forward Euler method for solving ordinary differential equations.
+    Step forward in time using the formula:
+    u[i+1] = u[i] + dt*f(u[i], t[i])
+    """
+
     def __init__(self, f):
         differential_solver.__init__(self, f)
 

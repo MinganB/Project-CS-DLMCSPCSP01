@@ -4,6 +4,9 @@ import numpy as np
 from scipy.optimize import curve_fit
 
 def load_dataset():
+    """
+    Load the dataset and perform some basic data cleaning and return the cleaned dataset.
+    """
     df = pd.read_csv('data/covid-misinfo-videos.csv')
 
     df = df.dropna(subset=['twitter_post_ids', 'facebook_post_ids', 'removal_timestamp', 'published_timestamp'])
@@ -34,6 +37,9 @@ def load_dataset():
     return df
 
 def get_daily_engagements(df):
+    """
+    Calculate the total number of engagements per day since the video was published.
+    """
     max_days = df['days_to_remove'].max()
     daily_engagements = df.groupby('days_to_remove')['total_engagement'].sum().reindex(range(1, max_days + 1), fill_value=0)
 
@@ -50,6 +56,9 @@ def get_daily_cumulative_engagements(df):
     return pd.DataFrame(engagement_sums)
 
 def plot_engagements(daily_engagements, cumulative_engagements):
+    """
+    Plot the daily engagements and cumulative engagements over time.
+    """
     fig, axs = plt.subplots(1, 2, figsize=(14, 7))
 
     # plot daily engagements
@@ -69,11 +78,11 @@ def plot_engagements(daily_engagements, cumulative_engagements):
     plt.show()
 
 def get_infected_recovered(df, day):
-    '''
+    """
     Calculate the total cumulative number of infected and recovered users at a given day.
     This calculation assumes that the engagement rate is constant over time, which might not be the case in reality.
     Incorporation of time-series data would allow a more sophisticated model.
-    '''
+    """
     infected = df[df['days_to_remove'] > day].apply(lambda row: day * row['engagement_per_day'], axis=1).sum()
     recovered = df[df['days_to_remove'] <= day]['total_engagement'].sum()
 
@@ -82,6 +91,9 @@ def get_infected_recovered(df, day):
     return int(round(infected)), int(round(recovered)), int(round(susceptible))
 
 def plot_infection_statistics(infected_recovered_data):
+    """
+    Plot the number of infected, recovered, and susceptible users over time.
+    """
     infected_recovered_df = pd.DataFrame(infected_recovered_data)
     plt.plot(infected_recovered_df['day'], infected_recovered_df['susceptible'] / 1e6, label='Susceptible', color='blue')
     plt.plot(infected_recovered_df['day'], infected_recovered_df['infected'] / 1e6, label='Infected', color='orange')
@@ -95,12 +107,8 @@ def plot_infection_statistics(infected_recovered_data):
 def estimate_sir_parameters(infected_recovered_data_df):
     """
     Estimate the parameters beta (infection rate) and mu (recovery rate) for the SIR model.
-
-    Parameters:
-    infected_recovered_data_df (pd.DataFrame): A DataFrame with columns 'day', 'infected', 'recovered', 'susceptible'.
-
-    Returns:
-    tuple: (beta, mu) - Estimated parameters.
+    Parameters: infected_recovered_data_df (A DataFrame with columns 'day', 'infected', 'recovered', 'susceptible').
+    Returns beta, mu (estimated parameters).
     """
     # Extract the data
     S = infected_recovered_data_df['susceptible'].values
