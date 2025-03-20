@@ -33,14 +33,21 @@ The data analysis module may be used to extract parameters informing the SIR mod
 ### SIR model
 Once data analysis has been completed, the SIR module can be used to create and fit model.
 1. Parameter inputs can either be specified in the sir.py module (lines 100 - 109), or 'enable_gui' can be set to True (line 79) allowing input through a user interface.
-2. Run the module: 'python sir.py'
+2. Run the module: 
+- 'python sir.py'
 
 ## Application overview
 ### Data analysis
-The Python application included a data analysis module to process and analyse the real-world misinformation dataset. The module was responsible for cleaning the dataset by removing rows with invalid or missing columns, as well as dropping redundant columns. It was also used to generate real-world visualisation graphs depicting the number of user engagements with each video over time. The module was also responsible for estimating daily engagements by calculating average daily rates.
+The Python application includes a data analysis module to process and analyze the real-world misinformation dataset. The module is responsible for:
+- Cleaning the dataset by removing rows with invalid or missing columns.
+- Dropping redundant columns.
+- Generating real-world visualization graphs depicting the number of user engagements with each video over time.
+- Estimating daily engagements by calculating average daily rates.
 
 ### Differential solver
 A differential solver module was developed to serve as a generic interface for differential equation solvers. Within this module, a Forward Euler solver was implemented and utilised in the main SIR module for finding derivatives.
 
 ### SIR module (main application module)
-The parameters derived from the data analysis module can be input into the SIR module via the user interface to generate estimations and visualise the outcomes. The SIR module handles the computation and graphical representation of the constructed model, providing a comparison between the real-world data and the SIR predictions.
+The parameters derived from the data analysis module can be input into the SIR module via the user interface to generate estimations and visualize the outcomes. The SIR module handles:
+- The computation and graphical representation of the constructed model.
+- Providing a comparison between the real-world data and the SIR predictions.
