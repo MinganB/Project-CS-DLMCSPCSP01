@@ -1,6 +1,18 @@
 # Project CS DLMCSPCSP01: Modeling misinformation spread using an adapted SIR model
  IUBH MSc Computer Science Project DLMCSPCSP01.
 
+ ## Table of Contents
+1. [Model Background](#model-background)
+2. [File Structure](#file-structure)
+3. [Model / Application Usage](#model--application-usage)
+   - [Getting Started](#getting-started)
+   - [Data Analysis](#data-analysis)
+   - [SIR Model](#sir-model)
+4. [Application Overview](#application-overview)
+   - [Data Analysis](#data-analysis-1)
+   - [Differential Solver](#differential-solver)
+   - [SIR Module (Main Application Module)](#sir-module-main-application-module)
+
  ## Model background
 An adaptation of the standard SIR epidemiological model will be applied to attempt to model the general patterns of misinformation spread. Parameters for the adapted model will then be estimated from a real-world misinformation dataset and the model outcomes compared to the real-world data values to estimate the accuracy of the model.
 
@@ -8,9 +20,10 @@ An adaptation of the standard SIR epidemiological model will be applied to attem
 ### Getting started
 1. Clone the GitHub repository to your local machine.
 2. Create and enter the Python virtual environment by running the following commands in the 'sir_venv/Project-CS-DLMCSPCSP01' working directory:
-   Create the venv: 'python -m venv sir_venv'
-   Enter the venv: 'source bin/activate' 
-3. The project dependancies can be installed from 'requirements.txt' by running 'python -m pip install -r requirements.txt'
+- Create the venv: 'python -m venv sir_venv'
+- Enter the venv: 'source bin/activate' 
+4. The project dependancies can be installed from 'requirements.txt' by running:
+- 'python -m pip install -r requirements.txt'
 
 ### Data analysis
 The data analysis module may be used to extract parameters informing the SIR model.
