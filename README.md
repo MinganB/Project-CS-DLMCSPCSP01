@@ -1,4 +1,4 @@
-# Project CS DLMCSPCSP01
+# Project CS DLMCSPCSP01: Modeling misinformation spread using an adapted SIR model
  IUBH MSc Computer Science Project DLMCSPCSP01.
 
  ## Model background
@@ -7,7 +7,9 @@ An adaptation of the standard SIR epidemiological model will be applied to attem
 ## Model / application usage
 ### Getting started
 1. Clone the GitHub repository to your local machine.
-2. The Python virtual environment can be entered by running 'source bin/activate' in the 'sir_venv/Project-CS-DLMCSPCSP01' working directory.
+2. Create and enter the Python virtual environment by running the following commands in the 'sir_venv/Project-CS-DLMCSPCSP01' working directory:
+   Create the venv: 'python -m venv sir_venv'
+   Enter the venv: 'source bin/activate' 
 3. The project dependancies can be installed from 'requirements.txt' by running 'python -m pip install -r requirements.txt'
 
 ### Data analysis
