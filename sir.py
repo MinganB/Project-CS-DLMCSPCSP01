@@ -1,10 +1,10 @@
 """
-SIR false news spread model
+SIR false news spread model using the Forward Euler method.
 Definition of the equations:
 
-S = susceptible population
-I = influenced population (spreaders)
-R = recovered population
+S = susceptible population (people who can be influenced to become spreaders)
+I = influenced population (spreaders of misinformation)
+R = recovered population (people who have recovered from the misinformation)
 
 S' = -beta * S * I
 I' = beta * S * I - mu * I
@@ -29,18 +29,14 @@ class SIR:
         """
 
         if isinstance(mu, (float, int)):
-            # treat mu as a constant
-            self.mu = lambda t: mu 
+            self.mu = lambda t: mu      # treat mu as a constant
         elif callable(mu):
-            # treat mu as a function
-            self.mu = mu
+            self.mu = mu                # treat mu as a function
 
         if isinstance(beta, (float, int)):
-            # treat beta as a constant
-            self.beta = lambda t: beta 
+            self.beta = lambda t: beta  # treat beta as a constant
         elif callable(beta):
-            # treat beta as a function
-            self.beta = beta
+            self.beta = beta            # treat beta as a function
 
         self.initial_conditions = [S0, I0, R0]
 
@@ -64,6 +60,9 @@ class SIR:
         return np.asarray([susceptible, influenced, recovered])
 
 def visualize_sir_model(u, t):
+    """
+    Visualize the SIR model outcome.
+    """
     plt.figure()
     plt.plot(t, u[:, 0], label='Susceptible')
     plt.plot(t, u[:, 1], label='Influenced')
@@ -72,22 +71,44 @@ def visualize_sir_model(u, t):
     plt.ylabel('Population')
     plt.title('SIR Model of Misinformation Spread')
     plt.legend()
+
     plt.show()
 
 if __name__ == "__main__":
 
-    def run_model():
-        beta_t0 = float(beta_t0_box.value)/1000
-        intervention_day = int(intervention_day_box.value)
-        intervention_beta = float(intervention_beta_box.value)/1000
-        mu_t0 = float(mu_t0_box.value)/10
-        intervention_mu = float(intervention_mu_box.value)/10
-        S0 = int(S0_box.value)
-        I0 = int(I0_box.value)
-        R0 = int(R0_box.value)
-        n_days = int(n_days_box.value)
-        resolution = int(resolution_box.value)
+    enable_gui = False # Set to True to enable GUI for parameter inputs
 
+    def run_model():
+        """
+        Run the SIR model with the given parameters.
+        """
+        if enable_gui:
+            beta_t0 = float(beta_t0_box.value)/1000
+            intervention_day = int(intervention_day_box.value)
+            intervention_beta = float(intervention_beta_box.value)/1000
+            mu_t0 = float(mu_t0_box.value)/10
+            intervention_mu = float(intervention_mu_box.value)/10
+            S0 = int(S0_box.value)
+            I0 = int(I0_box.value)
+            R0 = int(R0_box.value)
+            n_days = int(n_days_box.value)
+            resolution = int(resolution_box.value)
+        else:
+            """
+            The default parameters for the SIR model, obtained from the data_analysis.py module.
+            """
+            beta_t0 = 0.7701/1000
+            intervention_day = 20
+            intervention_beta = 0.4995/1000
+            mu_t0 = 0.2233/10
+            intervention_mu = 0.2233/10
+            S0 = 1000
+            I0 = 1
+            R0 = 0
+            n_days = 140
+            resolution = 1001
+
+        # Use lambda functions to define beta and mu as functions of time
         beta = lambda t: beta_t0 if t < intervention_day else intervention_beta
         mu = lambda t: mu_t0 if t < intervention_day else intervention_mu
 
@@ -100,52 +121,58 @@ if __name__ == "__main__":
 
         visualize_sir_model(u, t)
 
-    app = App(title="SIR Model - Parameter Input")
+    if enable_gui:
+        """
+        Create a GUI for input of model parameters.
+        """
+        app = App(title="SIR Model - Parameter Input")
 
-    text = Text(app, text="SIR Misinformation Model", size=20)
-    Text(app, text="Use the text boxes to adjust the parameters of the SIR model.")
+        text = Text(app, text="SIR Misinformation Model", size=20)
+        Text(app, text="Use the text boxes to adjust the parameters of the SIR model.")
 
-    Text(app, text="-" * 50)
+        Text(app, text="-" * 50)
 
-    Text(app, text="Initial influence rate (beta):") # beta_t0
-    beta_t0_box = TextBox(app, text="0.7701")
+        Text(app, text="Initial influence rate (beta):") # beta_t0
+        beta_t0_box = TextBox(app, text="0.7701")
 
-    Text(app, text="Initial recovery rate (mu):") # mu_t0
-    mu_t0_box = TextBox(app, text="0.2233")
+        Text(app, text="Initial recovery rate (mu):") # mu_t0
+        mu_t0_box = TextBox(app, text="0.2233")
 
-    Text(app, text="-" * 50)
+        Text(app, text="-" * 50)
 
-    Text(app, text="Intervention day:")
-    intervention_day_box = TextBox(app, text="20")
+        Text(app, text="Intervention day:")
+        intervention_day_box = TextBox(app, text="20")
 
-    Text(app, text="Adjusted influence rate (beta after intervention):")
-    intervention_beta_box = TextBox(app, text="0.4995")
+        Text(app, text="Adjusted influence rate (beta after intervention):")
+        intervention_beta_box = TextBox(app, text="0.4995")
 
-    Text(app, text="Adjusted recovery rate (mu after intervention):")
-    intervention_mu_box = TextBox(app, text="0.2233")
+        Text(app, text="Adjusted recovery rate (mu after intervention):")
+        intervention_mu_box = TextBox(app, text="0.2233")
 
-    Text(app, text="-" * 50)
+        Text(app, text="-" * 50)
 
-    Text(app, text="Initial susceptible population:") # S0
-    S0_box = TextBox(app, text="1000")
+        Text(app, text="Initial susceptible population:") # S0
+        S0_box = TextBox(app, text="1000")
 
-    Text(app, text="Initial influenced population:") # I0
-    I0_box = TextBox(app, text="1")
+        Text(app, text="Initial influenced population:") # I0
+        I0_box = TextBox(app, text="1")
 
-    Text(app, text="Initial recovered population:") # R0
-    R0_box = TextBox(app, text="0")
+        Text(app, text="Initial recovered population:") # R0
+        R0_box = TextBox(app, text="0")
 
-    Text(app, text="-" * 50)
+        Text(app, text="-" * 50)
 
-    Text(app, text="Number of days:")
-    n_days_box = TextBox(app, text="140")
+        Text(app, text="Number of days:")
+        n_days_box = TextBox(app, text="140")
 
-    Text(app, text="Time resolution (number of points):")
-    resolution_box = TextBox(app, text="1001")
+        Text(app, text="Time resolution (number of points):")
+        resolution_box = TextBox(app, text="1001")
 
-    Text(app, text="-" * 50)
+        Text(app, text="-" * 50)
 
-    PushButton(app, text="Run Model", command=run_model)
+        PushButton(app, text="Run Model", command=run_model)
 
-    app.height = 10000
-    app.display()
+        app.height = 10000
+        app.display()
+    else:
+        run_model()
